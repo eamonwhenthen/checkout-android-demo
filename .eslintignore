@@ -1,8 +1,0 @@
-node_modules
-dist
-build
-coverage
-.rollup.cache
-.env
-.eslintrc.js
-.babel.config.js
