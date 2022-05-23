@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -20,8 +21,6 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-
-
     <WebView
         android:id="@+id/webview"
         android:layout_width="match_parent"
@@ -29,19 +28,21 @@
         android:layout_height="wrap_content"
         />
 
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/paymentResponse"
-        android:layout_marginTop="20dp"
         android:layout_below="@id/webview"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:text=""
-        />
+        android:layout_margin="20dp">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/paymentResponse"
+            android:textStyle="italic"
+            android:textSize="10sp"
+            android:textColor="@color/black"
+            />
+    </ScrollView>
 
 
 </RelativeLayout>

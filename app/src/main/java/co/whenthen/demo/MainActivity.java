@@ -24,6 +24,10 @@ import android.webkit.WebView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Random;
 import java.util.UUID;
 
@@ -37,10 +41,9 @@ public class MainActivity extends AppCompatActivity implements CheckoutBridgeHan
     private final String CURRENCY = "EUR";
     private final String LANG = "en";
     private final String TAG = "MainActivity";
-    private final String bearerToken = "sk_test_uOSmCSROUVr1nTjASfZf5U6POCCR2Toi";
     private final String clientToken = "sk_test_f39ZtDHRJ1Fj0gFTw2Ws8yHR5dxLDM5U";
     private final String flowID = "1acbb1d4-caa0-4c83-be94-61564f113fd7";
-    private final String sdkUrl = "https://iridescent-zabaione-621b97.netlify.app";
+    private final String sdkUrl = "https://checkout-hosted.whenthen.com/";
 
 
     @Override
@@ -52,12 +55,8 @@ public class MainActivity extends AppCompatActivity implements CheckoutBridgeHan
 
         setSupportActionBar(binding.toolbar);
 
-//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-//        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-//        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-
-        webView = (WebView) findViewById(R.id.webview);
-        paymentResponse = (TextView) findViewById(R.id.paymentResponse);
+        webView = findViewById(R.id.webview);
+        paymentResponse = findViewById(R.id.paymentResponse);
 
         webView.setWebChromeClient(new WebChromeClient() {
         });
@@ -66,10 +65,10 @@ public class MainActivity extends AppCompatActivity implements CheckoutBridgeHan
         webView.clearCache(true);
         webView.getSettings().setDomStorageEnabled(true);
 
-        //Generate random and amount
+        //Generate random amount
         String amount = String.valueOf(new Random().nextInt(1000));
 
-        //add javascript callback function for webView to call.
+        //add javascript callback function for the webView to call.
         webView.addJavascriptInterface(this, "checkoutBridge");
 
         loadCheckoutSDK(webView, amount);
@@ -77,12 +76,25 @@ public class MainActivity extends AppCompatActivity implements CheckoutBridgeHan
 
     private void loadCheckoutSDK(WebView webView, String amount) {
 
-        //DropInOptions checkout = new DropInOptions( clientToken, amount, BuildConfig. CURRENCY,);
+        //Define SDK properties here
+        JSONObject theme = new JSONObject();
+        JSONArray apms = new JSONArray();
+
+        try {
+            apms.put(new JSONObject().put("type", "klarna"));
+            theme.put("colors", new JSONObject().put("border", "blue"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         String url = sdkUrl +
                  "?apiKey="+clientToken
                 + "&amount=" +amount
                 + "&currencyCode=" +CURRENCY
-                + "&flowId=" + flowID;
+                + "&flowId=" + flowID
+                + "&alternativePaymentMethods=" + apms
+                + "&theme=" + theme;
+
         webView.loadUrl(url);
     }
 
@@ -95,18 +107,17 @@ public class MainActivity extends AppCompatActivity implements CheckoutBridgeHan
     }
 
 
+    /**
+     *
+     * @param eventType "error" | "paymentComplete"
+     * @param payload JSONString
+     */
     @Override
     @JavascriptInterface
     public void handleEvent(String eventType, String payload) {
         Log.d(TAG, "handleCheckoutEvent= eventType: "+ eventType + " \n payload: "+ payload );
-        //Toast.makeText(this, "eventType: "+ eventType + "\n\n payload: "+ payload, Toast.LENGTH_LONG ).show();
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                paymentResponse.setText("eventType: "+ eventType + "\n\n payload: "+ payload);
-            }
+        runOnUiThread(() -> {
+            paymentResponse.setText("eventType: "+ eventType + "\n\n payload: "+ payload);
         });
-
     }
 }
