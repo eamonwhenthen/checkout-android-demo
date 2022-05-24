@@ -2,27 +2,18 @@ package co.whenthen.demo;
 
 import android.os.Bundle;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
-import android.view.View;
 
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
 import co.whenthen.demo.databinding.ActivityMainBinding;
 
 import android.view.Menu;
-import android.view.MenuItem;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,17 +24,16 @@ import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity implements CheckoutBridgeHandler{
 
-    private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
-    private TextView paymentResponse;
+    private TextView paymentText;
     private WebView webView;
 
     private final String CURRENCY = "EUR";
     private final String LANG = "en";
     private final String TAG = "MainActivity";
-    private final String clientToken = "sk_test_f39ZtDHRJ1Fj0gFTw2Ws8yHR5dxLDM5U";
-    private final String flowID = "1acbb1d4-caa0-4c83-be94-61564f113fd7";
-    private final String sdkUrl = "https://checkout-hosted.whenthen.com/";
+    private final String clientToken = ""; //https://documentation.whenthen.com/api-reference#client-token
+    private final String flowID = ""; //The UUID of the flow you want the payment to run against.
+    private final String sdkUrl = "https://mobile-hosted-checkout.whenthen.com/";
 
 
     @Override
@@ -56,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements CheckoutBridgeHan
         setSupportActionBar(binding.toolbar);
 
         webView = findViewById(R.id.webview);
-        paymentResponse = findViewById(R.id.paymentResponse);
+        paymentText = findViewById(R.id.paymentText);
 
         webView.setWebChromeClient(new WebChromeClient() {
         });
@@ -76,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements CheckoutBridgeHan
 
     private void loadCheckoutSDK(WebView webView, String amount) {
 
-        //Define SDK properties here
+        //You can define SDK properties like so, https://documentation.whenthen.com/payment-processing/checkout/drop-in#checkout-sdk-options
         JSONObject theme = new JSONObject();
         JSONArray apms = new JSONArray();
 
@@ -108,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements CheckoutBridgeHan
 
 
     /**
-     *
+     * !! Method signature cannot be changed !!
      * @param eventType "error" | "paymentComplete"
      * @param payload JSONString
      */
@@ -117,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements CheckoutBridgeHan
     public void handleEvent(String eventType, String payload) {
         Log.d(TAG, "handleCheckoutEvent= eventType: "+ eventType + " \n payload: "+ payload );
         runOnUiThread(() -> {
-            paymentResponse.setText("eventType: "+ eventType + "\n\n payload: "+ payload);
+            paymentText.setText("eventType: "+ eventType + "\n\n payload: "+ payload);
         });
     }
 }
