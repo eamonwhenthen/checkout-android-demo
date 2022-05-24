@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements CheckoutBridgeHan
 
     private void loadCheckoutSDK(WebView webView, String amount) {
 
-        //You can define SDK properties like so, https://documentation.whenthen.com/payment-processing/checkout/drop-in#checkout-sdk-options
+        //Define SDK properties here
         JSONObject theme = new JSONObject();
         JSONArray apms = new JSONArray();
 
@@ -100,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements CheckoutBridgeHan
     /**
      * !! Method signature cannot be changed !!
      * @param eventType "error" | "paymentComplete"
+     * NOTE: API errors will be sent as paymentComplete event with an {errors: [], data: object}
      * @param payload JSONString
      */
     @Override
