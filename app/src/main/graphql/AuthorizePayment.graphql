@@ -1,0 +1,6 @@
+mutation authorizePayment($authorisePayment: AuthorisedPaymentInput!) {
+  authorizePayment(authorisePayment: $authorisePayment) {
+        id
+        status
+    }
+}

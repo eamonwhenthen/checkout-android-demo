@@ -1,0 +1,7 @@
+mutation tokenisePaymentMethod($data: TokenInput!){
+    tokenisePaymentMethod(data: $data) {
+        id
+        token
+        createdDate
+    }
+}

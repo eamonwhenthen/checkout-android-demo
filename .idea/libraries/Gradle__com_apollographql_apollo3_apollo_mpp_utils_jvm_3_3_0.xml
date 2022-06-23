@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: com.apollographql.apollo3:apollo-mpp-utils-jvm:3.3.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.apollographql.apollo3/apollo-mpp-utils-jvm/3.3.0/842a5438fcac261619e5ea43d61226120ea96fe4/apollo-mpp-utils-jvm-3.3.0.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.apollographql.apollo3/apollo-mpp-utils-jvm/3.3.0/3f1cb33db159d8c8efeeb9222e663a7ae3a84703/apollo-mpp-utils-jvm-3.3.0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.apollographql.apollo3/apollo-mpp-utils-jvm/3.3.0/bbb268281dcd05d810f3c4eebb63e4a8528d451e/apollo-mpp-utils-jvm-3.3.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
