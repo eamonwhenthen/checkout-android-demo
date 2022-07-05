@@ -4,9 +4,22 @@
     <!-- Strings used for fragments for navigation -->
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+    <string name="webview_demo">WebView Checkout Demo</string>
+    <string name="nativeform_demo">Native Checkout Demo</string>
+    <string name="payments_show_name">Successfully received payment data for %s!</string>
 
-    <string name="webview_demo">WebView Demo</string>
-    <string name="nativeform_demo">Native Form Demo</string>
+    <!-- Checkout -->
+    <string name="google_pay_status_unavailable">Unfortunately, Google Pay is not available on this device.</string>
+    <string name="google_wallet_status_unavailable" translatable="false">Unfortunately, Google Wallet is not available on this phone.</string>
+    <string name="gateway_replace_name_example">"Gateway name set to \"example\" - please modify Constants.java and replace it with your own gateway."</string>
+    <string name="checkout_item_description">Description</string>
+    <string name="add_google_wallet_success" translatable="false">The pass was added successfully!</string>
+    <string name="googlepay_button_content_description">Google Pay</string>
+    <string name="buy_with_googlepay_button_content_description">Buy with Google Pay</string>
+    <string name="add_to_google_wallet_button_content_description">Add to Google Wallet</string>
+    <string name="card_tokenization_error">Error occurred while tokenizing card</string>
+    <string name="amount_error">Amount must be greater than 1</string>
+
 
 
 </resources>

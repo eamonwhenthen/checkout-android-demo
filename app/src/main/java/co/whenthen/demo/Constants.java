@@ -26,12 +26,24 @@ import com.google.android.gms.wallet.WalletConstants;
  */
 public class Constants {
 
-    public static final String API_ENDPOINT = "https://api.dev.whenthen.com/api/graphql";
-    public static final String CLIENT_TOKEN = "sk_test_f39ZtDHRJ1Fj0gFTw2Ws8yHR5dxLDM5U";
-    public static final String SDK_URL = "https://mobile-hosted-checkout.whenthen.com/";
-    public static final String FLOW_ID = ""; //The UUID of the flow you want the payment to run against.
 
-    public static final String MERCHANT_NAME = "WhenThen";
+    public static final String API_ENDPOINT = "https://api.dev.whenthen.co/api/graphql";
+
+    //https://documentation.whenthen.com/api-reference#client-token
+    public static final String CLIENT_TOKEN = "sk_test_FZjGdNNNhMQOqGeU7eqMHXcysl9YucgM";
+
+    public static final String WEBVIEW_SDK_URL = "https://mobile-hosted-checkout.whenthen.com/";
+    /**
+     * The UUID of the flow you want the payment to run against.
+     */
+    public static final String FLOW_ID = "6bbd2b09-0e8a-4682-874f-d1028425805e";
+
+    public static final String PAYMENT_METHOD_GOOGLE_PAY = "GOOGLE_PAY";
+
+    public static final String PAYMENT_METHOD_CARD = "CARD";
+
+
+    public static final String CHECKOUT_LANGUAGE = "en";
 
 
     /**
@@ -94,7 +106,14 @@ public class Constants {
      *
      * @value #PAYMENT_GATEWAY_TOKENIZATION_NAME
      */
-    public static final String PAYMENT_GATEWAY_TOKENIZATION_NAME = "example";
+    public static final String PAYMENT_GATEWAY_TOKENIZATION_NAME = "whenthen";
+
+    /**
+     * Payment gateway merchantID must match the value used
+     * in https://documentation.whenthen.com/orchestrate/alternative-payment-methods/google-pay#configuring-whenThen-to-accept-googlepay
+     */
+    public static final String PAYMENT_GATEWAY_MERCHANT_ID = "test";
+
 
     /**
      * Custom parameters required by the processor/gateway.
@@ -107,7 +126,7 @@ public class Constants {
     public static final HashMap<String, String> PAYMENT_GATEWAY_TOKENIZATION_PARAMETERS =
             new HashMap<String, String>() {{
                 put("gateway", PAYMENT_GATEWAY_TOKENIZATION_NAME);
-                put("gatewayMerchantId", "exampleGatewayMerchantId");
+                put("gatewayMerchantId", PAYMENT_GATEWAY_MERCHANT_ID);
                 // Your processor may require additional parameters.
             }};
 

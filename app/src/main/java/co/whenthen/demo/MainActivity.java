@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu;
-import co.whenthen.demo.natived.NativeFormActivity;
+import co.whenthen.demo.custom.CheckoutActivity;
 import co.whenthen.demo.webview.WebViewActivity;
 
 
@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.btn_native_form).setOnClickListener(v -> {
-            startActivity(new Intent(context, NativeFormActivity.class));
+            startActivity(new Intent(context, CheckoutActivity.class));
         });
 
     }

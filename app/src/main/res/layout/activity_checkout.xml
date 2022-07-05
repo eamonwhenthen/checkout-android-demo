@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".MainActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/Theme.WhenThenDemo.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/Theme.WhenThenDemo.PopupOverlay" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/name_input"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="100dp"
+            android:digits="ABCDEFGHIJKLMNOPQRSTUWXYZabcdefghijklmnopqrstuwxyz- "
+            android:hint="Name"
+            android:text="Checkout Android"
+            android:textColor="@color/black"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/card_input"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="Card Details"
+            android:text="4242 4242 4242 4242"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/month_input"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="12"
+            android:hint="Month"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/year_input"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="Year"
+            android:maxLength="4"
+            android:text="34"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/cvv_input"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="CVV"
+            android:text="123"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/amount_input"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="Amount"
+            android:text="112"
+            android:inputType="number" />
+
+        <Button
+            android:id="@+id/pay_button"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/buy_button_height"
+            android:layout_margin="10dp"
+            android:text="PAY" />
+
+        <include
+            android:id="@+id/googlePayButton"
+            layout="@layout/buy_with_googlepay_button"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/buy_button_height"
+            android:layout_margin="10dp"
+            android:visibility="visible" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

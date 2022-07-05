@@ -16,6 +16,7 @@ import org.json.JSONObject;
 
 import java.util.Random;
 
+import co.whenthen.demo.Constants;
 import co.whenthen.demo.R;
 import co.whenthen.demo.databinding.ActivityMainBinding;
 
@@ -25,12 +26,8 @@ public class WebViewActivity extends AppCompatActivity implements WebViewEventHa
     private TextView paymentText;
     private WebView webView;
 
-    private final String CURRENCY = "EUR";
-    private final String LANG = "en";
     private final String TAG = "MainActivity";
-    private final String clientToken = ""; //https://documentation.whenthen.com/api-reference#client-token
-    private final String flowID = ""; //The UUID of the flow you want the payment to run against.
-    private final String sdkUrl = "https://mobile-hosted-checkout.whenthen.com/";
+    private final String clientToken = "";
 
 
     @Override
@@ -73,11 +70,11 @@ public class WebViewActivity extends AppCompatActivity implements WebViewEventHa
             e.printStackTrace();
         }
 
-        String url = sdkUrl +
-                 "?apiKey="+clientToken
+        String url = Constants.WEBVIEW_SDK_URL +
+                 "?apiKey="+ Constants.CLIENT_TOKEN
                 + "&amount=" +amount
-                + "&currencyCode=" +CURRENCY
-                + "&flowId=" + flowID
+                + "&currencyCode=" + Constants.CURRENCY_CODE
+                + "&flowId=" + Constants.FLOW_ID
                 + "&alternativePaymentMethods=" + apms
                 + "&theme=" + theme;
 
