@@ -12,13 +12,13 @@ public class Constants {
      * WhenThen API endpoint as defined in the docs
      * https://documentation.whenthen.com/api-reference#endpoints
      */
-    public static final String API_ENDPOINT = "https://api.dev.whenthen.co/api/graphql";
+    public static final String API_ENDPOINT = "";
 
     /**
      * Client token should be populated from a server-side request.
      * https://documentation.whenthen.com/api-reference#client-token
      */
-    public static String CLIENT_TOKEN = "sk_test_FZjGdNNNhMQOqGeU7eqMHXcysl9YucgM";
+    public static String CLIENT_TOKEN = "";
 
     public static final String WEBVIEW_SDK_URL = "https://mobile-hosted-checkout.whenthen.com/";
 
@@ -26,7 +26,7 @@ public class Constants {
      * The Id of the flow you want the payment to run against. You can find it in
      * https://app.whenthen.co/settings/developers
      */
-    public static final String FLOW_ID = "6bbd2b09-0e8a-4682-874f-d1028425805e";
+    public static final String FLOW_ID = "";
 
     public static final String PAYMENT_METHOD_GOOGLE_PAY = "GOOGLE_PAY";
 
@@ -93,7 +93,7 @@ public class Constants {
      * For testing, use any string (must match what you've set when calling setupWallet API)
      * in https://documentation.whenthen.com/orchestrate/alternative-payment-methods/google-pay#configuring-whenThen-to-accept-googlepay
      */
-    public static final String PAYMENT_GATEWAY_MERCHANT_ID = "test";
+    public static final String PAYMENT_GATEWAY_MERCHANT_ID = "";
 
 
     /**
