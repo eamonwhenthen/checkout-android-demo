@@ -4,11 +4,12 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/layout/activity_checkout.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.10176239013671878" />
         <entry key="app/src/main/res/layout/activity_native.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_webview.xml" value="0.134375" />
         <entry key="app/src/main/res/layout/buy_with_googlepay_button.xml" value="0.135258358662614" />
         <entry key="app/src/main/res/layout/content_main.xml" value="0.22780797101449277" />
+        <entry key="app/src/main/res/menu/menu_main.xml" value="0.1296875" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1375" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1375" />
       </map>

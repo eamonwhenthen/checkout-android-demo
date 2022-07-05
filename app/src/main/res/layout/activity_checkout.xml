@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".MainActivity">
+    tools:context=".custom.CheckoutActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -35,9 +35,12 @@
             android:layout_marginTop="100dp"
             android:digits="ABCDEFGHIJKLMNOPQRSTUWXYZabcdefghijklmnopqrstuwxyz- "
             android:hint="Name"
-            android:text="Checkout Android"
+            android:text="John Doe"
+            android:inputType="text"
+            android:theme="@style/App_EditTextStyle"
             android:textColor="@color/black"
-            android:inputType="text" />
+            android:textColorHint="@color/grey"
+            />
 
         <EditText
             android:id="@+id/card_input"
@@ -45,7 +48,11 @@
             android:layout_height="40dp"
             android:hint="Card Details"
             android:text="4242 4242 4242 4242"
-            android:inputType="number" />
+            android:inputType="number"
+            android:theme="@style/App_EditTextStyle"
+            android:textColor="@color/black"
+            android:textColorHint="@color/grey"
+            />
 
         <EditText
             android:id="@+id/month_input"
@@ -53,7 +60,11 @@
             android:layout_height="40dp"
             android:text="12"
             android:hint="Month"
-            android:inputType="number" />
+            android:inputType="number"
+            android:theme="@style/App_EditTextStyle"
+            android:textColor="@color/black"
+            android:textColorHint="@color/grey"
+            />
 
         <EditText
             android:id="@+id/year_input"
@@ -62,7 +73,10 @@
             android:hint="Year"
             android:maxLength="4"
             android:text="34"
-            android:inputType="number" />
+            android:theme="@style/App_EditTextStyle"
+            android:textColor="@color/black"
+            android:inputType="number"
+            android:textColorHint="@color/grey"/>
 
         <EditText
             android:id="@+id/cvv_input"
@@ -70,7 +84,10 @@
             android:layout_height="40dp"
             android:hint="CVV"
             android:text="123"
-            android:inputType="number" />
+            android:inputType="number"
+            android:theme="@style/App_EditTextStyle"
+            android:textColor="@color/black"
+            android:textColorHint="@color/grey"/>
 
         <EditText
             android:id="@+id/amount_input"
@@ -78,14 +95,19 @@
             android:layout_height="40dp"
             android:hint="Amount"
             android:text="112"
-            android:inputType="number" />
+            android:inputType="number"
+            android:theme="@style/App_EditTextStyle"
+            android:textColor="@color/black"
+            android:textColorHint="@color/grey"/>
 
         <Button
             android:id="@+id/pay_button"
             android:layout_width="match_parent"
             android:layout_height="@dimen/buy_button_height"
             android:layout_margin="10dp"
-            android:text="PAY" />
+            android:text="PAY"
+            android:textColor="@color/white"
+            />
 
         <include
             android:id="@+id/googlePayButton"

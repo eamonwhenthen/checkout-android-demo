@@ -22,6 +22,7 @@ import android.content.Context;
 
 import com.google.android.gms.wallet.PaymentsClient;
 import com.google.android.gms.wallet.Wallet;
+import com.google.android.gms.wallet.WalletConstants;
 
 
 import java.math.BigDecimal;
@@ -62,7 +63,7 @@ public class PaymentsUtil {
      */
     public static PaymentsClient createPaymentsClient(Context context) {
         Wallet.WalletOptions walletOptions =
-                new Wallet.WalletOptions.Builder().setEnvironment(Constants.PAYMENTS_ENVIRONMENT).build();
+                new Wallet.WalletOptions.Builder().setEnvironment(WalletConstants.ENVIRONMENT_TEST).build();
         return Wallet.getPaymentsClient(context, walletOptions);
     }
 

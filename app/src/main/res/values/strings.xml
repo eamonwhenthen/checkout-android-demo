@@ -1,11 +1,11 @@
 <resources>
-    <string name="app_name">WhenThen Demo</string>
+    <string name="app_name">WhenThen Checkout Demo</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-    <string name="webview_demo">WebView Checkout Demo</string>
-    <string name="nativeform_demo">Native Checkout Demo</string>
+    <string name="webview_demo">WebView Demo</string>
+    <string name="nativeform_demo">Native Demo</string>
     <string name="payments_show_name">Successfully received payment data for %s!</string>
 
     <!-- Checkout -->

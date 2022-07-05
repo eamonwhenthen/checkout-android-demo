@@ -1,6 +1,5 @@
 package co.whenthen.demo.custom;
 
-import static co.whenthen.demo.custom.PaymentsUtil.CENTS_IN_A_UNIT;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -8,11 +7,9 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
-import android.view.Menu;
 import android.os.Bundle;
 
 import co.whenthen.demo.AuthorizePaymentMutation;
-import co.whenthen.demo.Constants;
 import co.whenthen.demo.R;
 
 import android.view.View;
@@ -20,16 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import co.whenthen.demo.TokenisePaymentMethodMutation;
-import co.whenthen.demo.type.AuthorisedPaymentInput;
-import co.whenthen.demo.type.GooglePayInput;
 import co.whenthen.demo.type.PaymentCardInput;
-import co.whenthen.demo.type.PaymentMethodDtoInput;
-import co.whenthen.demo.type.PaymentMethodInput;
-import co.whenthen.demo.type.PaymentStatus;
-import co.whenthen.demo.type.ThreeDSecureDtoInput;
-import co.whenthen.demo.type.TokenInput;
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.IntentSenderRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -58,19 +46,14 @@ import org.json.JSONObject;
 
 import java.util.Locale;
 import java.util.Objects;
-import java.util.UUID;
 
 public class CheckoutActivity extends AppCompatActivity {
 
+    private static final String TAG = "MainActivity";
     private PaymentsClient googlePayClient;
-    private final int LOAD_PAYMENT_DATA_REQUEST_CODE = 104;
     private View googlePayButton;
-    private Button payByCardButton;
-
-    private final String TAG = "MainActivity";
-    private long amount = 0;
-
     private ProgressDialog loadingDialog;
+    private EditText amountInput;
 
     // Handle potential conflict from calling loadPaymentData.
     ActivityResultLauncher<IntentSenderRequest> resolvePaymentForResult = registerForActivityResult(
@@ -82,7 +65,7 @@ public class CheckoutActivity extends AppCompatActivity {
                         if (resultData != null) {
                             PaymentData paymentData = PaymentData.getFromIntent(result.getData());
                             if (paymentData != null) {
-                                handlePaymentSuccess(paymentData);
+                                handleApprovedGooglePay(paymentData);
                             }
                         }
                         break;
@@ -96,30 +79,22 @@ public class CheckoutActivity extends AppCompatActivity {
      * Callback definition, where AuthorizePaymentResponse is handled for all payment types
      */
     ApolloCall.Callback<AuthorizePaymentMutation.Data> authorizePaymentCallback = new ApolloCall.Callback<AuthorizePaymentMutation.Data>() {
-
         @Override
         public void onResponse(@NonNull Response<AuthorizePaymentMutation.Data> response) {
             Log.i(TAG, "onResponse: " + response.toString());
-            runOnUiThread(() -> {
-
-                loadingDialog.dismiss();
-                //Handle request error.
-                if(response.hasErrors()){
-                    Toast.makeText(getBaseContext(), response.getErrors().get(0).getMessage(), Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                //Show payment status
-                AuthorizePaymentMutation.AuthorizePayment payment = Objects.requireNonNull(response.getData()).authorizePayment();
-                Toast.makeText(getBaseContext(), payment.status().rawValue(), Toast.LENGTH_LONG).show();
-            });
+            //Handle request error.
+            if(response.hasErrors()){
+                showResult(response.getErrors().get(0).getMessage());
+                return;
+            }
+            //Handle and show payment result
+            AuthorizePaymentMutation.AuthorizePayment payment = Objects.requireNonNull(response.getData()).authorizePayment();
+            showResult(payment.status().rawValue());
         }
-
         @Override
         public void onFailure(@NonNull ApolloException e) {
             Log.e(TAG, "onFailure: " + e );
-            loadingDialog.dismiss();
-            runOnUiThread(() -> Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show());
+            showResult(e.getMessage());
         }
     };
 
@@ -133,34 +108,40 @@ public class CheckoutActivity extends AppCompatActivity {
 
         googlePayClient = PaymentsUtil.createPaymentsClient(this.getBaseContext());
 
+        amountInput = findViewById(R.id.amount_input);
+
         googlePayButton = findViewById(R.id.googlePayButton);
         googlePayButton.setOnClickListener(this::requestGooglePayment);
-        setGooglePayAvailable();
 
-        payByCardButton = findViewById(R.id.pay_button);
+        Button payByCardButton = findViewById(R.id.pay_button);
         payByCardButton.setOnClickListener(this::requestCardPayment);
 
         loadingDialog = new ProgressDialog(this);
         loadingDialog.setCancelable(false);
         loadingDialog.setMessage("Processing your payment");
+
+        setGooglePayAvailable();
+    }
+
+    /**
+     * Use runOnUiThread to show response
+     */
+    public void showResult(String message){
+        runOnUiThread(() -> {
+            loadingDialog.dismiss();
+            Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG).show();
+        });
     }
 
     /**
      * If isReadyToPay returned {@code true}, show the button and hide the "checking" text.
-     * Otherwise, notify the user that Google Pay is not available. Please adjust to fit in with
-     * your current user flow. You are not required to explicitly let the user know if isReadyToPay
-     * returns {@code false}.
+     * Otherwise, notify the user that Google Pay is not available.
      */
     private void setGooglePayAvailable(){
-
         JSONObject isReadyToPayRequestJson = PaymentsUtil.getIsReadyToPayRequest();
-
-        Log.e("isReadyToPay", String.valueOf(isReadyToPayRequestJson));
-
-        IsReadyToPayRequest isReadytoPay = IsReadyToPayRequest.fromJson(String.valueOf(isReadyToPayRequestJson));
-
-        Task<Boolean> paymentTask = googlePayClient.isReadyToPay(isReadytoPay);
-        paymentTask.addOnCompleteListener(this, (completeTask) -> {
+        IsReadyToPayRequest isReadyToPay = IsReadyToPayRequest.fromJson(String.valueOf(isReadyToPayRequestJson));
+        Task<Boolean> paymentTask = googlePayClient.isReadyToPay(isReadyToPay);
+        paymentTask.addOnCompleteListener(completeTask-> {
             if (completeTask.isSuccessful()) {
                 googlePayButton.setVisibility(View.VISIBLE);
             } else {
@@ -177,8 +158,6 @@ public class CheckoutActivity extends AppCompatActivity {
         String month = ((EditText) findViewById(R.id.month_input)).getText().toString();
         String year = ((EditText) findViewById(R.id.year_input)).getText().toString();
         String cvv = ((EditText) findViewById(R.id.cvv_input)).getText().toString();
-        String inputAmount = ((EditText) findViewById(R.id.amount_input)).getText().toString();
-        amount = Long.parseLong(inputAmount) * 100;
 
         Input<String> cvvInput = Input.optional(cvv);
 
@@ -189,70 +168,23 @@ public class CheckoutActivity extends AppCompatActivity {
                                                 .cvcInput(cvvInput).build());
         //Showing loading indicator to block UI interaction
         loadingDialog.show();
-
-        /**
-         * Tokenize the card
-         */
-        try{
-
-            TokenInput tokenInput = TokenInput.builder().paymentMethod(PaymentMethodInput.builder()
-                            .cardInput(cardInput).build()).build();
-            GraphQLClient.getInstance().mutate(TokenisePaymentMethodMutation.builder()
-                    .data(tokenInput)
-                    .build()).enqueue(new ApolloCall.Callback<TokenisePaymentMethodMutation.Data>() {
-                @Override
-                public void onResponse(@NonNull Response<TokenisePaymentMethodMutation.Data> response) {
-                    if(response.hasErrors()){
-                        runOnUiThread(() ->{
-                            loadingDialog.dismiss();
-                            Toast.makeText(getBaseContext(), R.string.card_tokenization_error, Toast.LENGTH_LONG).show();
-                        });
-                    }
-
-
-                    authorizePayment(response.getData().tokenisePaymentMethod().token(), amount);
-                    Log.e(TAG, "tokenizePaymentMethod onResponse: " + response);
-                }
-
-                @Override
-                public void onFailure(@NonNull ApolloException e) {
-                    Log.e(TAG, "tokenizePaymentMethod onFailure: ", e);
-                    runOnUiThread(() ->{
-                        loadingDialog.dismiss();
-                        Toast.makeText(getBaseContext(), R.string.card_tokenization_error, Toast.LENGTH_LONG).show();
-                    });
-                }
-            });
-        }catch (ApolloException e){
-            Log.e(TAG, "tokenizePaymentMethod: ", e);
-        }
+        GraphQLClient.getInstance(this).authorizePayment(authorizePaymentCallback, cardInput, getAmount());
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void requestGooglePayment(View v){
 
-        amount = Long.parseLong(((EditText) findViewById(R.id.amount_input)).getText().toString());
-        if(amount <=1 ){
-            Toast.makeText(getBaseContext(), R.string.amount_error, Toast.LENGTH_LONG).show();
-            return;
-        }
-        amount = amount * 100; //Long.parseLong(PaymentsUtil.centsToString(amount));
-
-
-            final JSONObject paymentRequestJson = PaymentsUtil.getPaymentDataRequest(amount);
+            final JSONObject paymentRequestJson = PaymentsUtil.getPaymentDataRequest(getAmount());
             if (paymentRequestJson == null) {
                 Log.e("RequestPayment", "Can't fetch payment data request");
                 return;
             }
 
             final PaymentDataRequest paymentRequest = PaymentDataRequest.fromJson(paymentRequestJson.toString());
-
             final Task<PaymentData> task = googlePayClient.loadPaymentData(paymentRequest);
 
             task.addOnCompleteListener(completedTask -> {
-                //loadingDialog.show();
                 if (completedTask.isSuccessful()) {
-                    handlePaymentSuccess(completedTask.getResult());
+                    handleApprovedGooglePay(completedTask.getResult());
                 } else {
                     Exception exception = completedTask.getException();
                     if (exception instanceof ResolvableApiException) {
@@ -271,13 +203,6 @@ public class CheckoutActivity extends AppCompatActivity {
                     }
                 }
             });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
     }
 
     /**
@@ -303,21 +228,20 @@ public class CheckoutActivity extends AppCompatActivity {
      * @see <a href="https://developers.google.com/pay/api/android/reference/
      * object#PaymentData">PaymentData</a>
      */
-    private void handlePaymentSuccess(PaymentData paymentData) {
+    private void handleApprovedGooglePay(PaymentData paymentData) {
         final String paymentInfo = paymentData.toJson();
 
         loadingDialog.show();
-
         Log.i(TAG, "handlePaymentSuccess: paymentInfo: " + paymentInfo);
-
         JSONObject tokenizationData = null;
         try {
-            tokenizationData = new JSONObject(paymentInfo)
+            String token = new JSONObject(paymentInfo)
                     .getJSONObject("paymentMethodData")
-                    .getJSONObject("tokenizationData");
+                    .getJSONObject("tokenizationData")
+                    .get("token").toString();
 
-            //send token to WT via authorizePaymentGraphQL API
-            authorizePayment(tokenizationData, amount);
+            //Use GooglePay token to authorize a payment.
+            GraphQLClient.getInstance(this).authorizePayment(authorizePaymentCallback, token, getAmount());
         } catch (JSONException e) {
             Log.e("handlePaymentSuccess", "Error: " + e);
             e.printStackTrace();
@@ -325,68 +249,11 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     /**
-     * Authorize a Payment using GooglePay token
-     * @param googlePayToken
+     * Get amount in minor-unit (cents).
+     * @return long
      */
-    private void authorizePayment(JSONObject googlePayToken, long amount) throws JSONException {
-
-        PaymentMethodDtoInput paymentMethodDtoInput =  PaymentMethodDtoInput.builder()
-                .type(Constants.PAYMENT_METHOD_GOOGLE_PAY)
-                .walletToken(googlePayToken.getString("token"))
-                .googlePay(GooglePayInput.builder().transactionId(UUID.randomUUID().toString()).build())
-                .build();
-
-        AuthorisedPaymentInput input = AuthorisedPaymentInput.builder()
-                .orderId(UUID.randomUUID().toString())
-                .flowId(Constants.FLOW_ID)
-                .currencyCode(Constants.CURRENCY_CODE)
-                .amount(amount)
-                .paymentMethod(paymentMethodDtoInput)
-                .build();
-
-        try{
-             GraphQLClient.getInstance()
-                            .mutate(AuthorizePaymentMutation.builder()
-                                    .authorisePayment(input)
-                                    .build())
-                    .enqueue(authorizePaymentCallback);
-        }catch (ApolloException e){
-            Log.e(TAG, "authorizePayment: ", e);
-        }
-
-    }
-
-    /**
-     * Authorize Payment using a card token
-     * @param cardToken
-     * @param amount in microunit
-     * TODO: Handle 3DS
-     */
-    private void authorizePayment(String cardToken, long amount){
-
-        PaymentMethodDtoInput paymentMethodDtoInput =  PaymentMethodDtoInput.builder()
-                .type(Constants.PAYMENT_METHOD_CARD)
-                .token(cardToken)
-                .build();
-
-        AuthorisedPaymentInput input = AuthorisedPaymentInput.builder()
-                .orderId(UUID.randomUUID().toString())
-                .flowId(Constants.FLOW_ID)
-                .currencyCode(Constants.CURRENCY_CODE)
-                .amount(amount)
-                .paymentMethod(paymentMethodDtoInput)
-                .perform3DSecure(ThreeDSecureDtoInput.builder().redirectUrl("someUrl.com").build())
-                .build();
-
-        try{
-            GraphQLClient.getInstance()
-                    .mutate(AuthorizePaymentMutation.builder()
-                            .authorisePayment(input)
-                            .build())
-                    .enqueue(authorizePaymentCallback);
-        }catch (ApolloException e){
-            Log.e(TAG, "authorizePayment: ", e);
-        }
+    private long getAmount(){
+        return Long.parseLong(amountInput.getText().toString()) * 100;
     }
 
 

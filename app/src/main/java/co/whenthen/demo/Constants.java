@@ -6,35 +6,25 @@ import java.util.List;
 import com.google.android.gms.wallet.WalletConstants;
 
 
-/**
- * This file contains several constants you must edit before proceeding.
- * Please take a look at PaymentsUtil.java to see where the constants are used and to potentially
- * remove ones not relevant to your integration.
- *
- * <p>Required changes:
- * <ol>
- * <li> Update SUPPORTED_NETWORKS and SUPPORTED_METHODS if required (consult your processor if
- *      unsure)
- * <li> Update CURRENCY_CODE to the currency you use.
- * <li> Update SHIPPING_SUPPORTED_COUNTRIES to list the countries where you currently ship. If this
- *      is not applicable to your app, remove the relevant bits from PaymentsUtil.java.
- * <li> If you're integrating with your {@code PAYMENT_GATEWAY}, update
- *      PAYMENT_GATEWAY_TOKENIZATION_NAME and PAYMENT_GATEWAY_TOKENIZATION_PARAMETERS per the
- *      instructions they provided. You don't need to update DIRECT_TOKENIZATION_PUBLIC_KEY.
- * <li> If you're using {@code DIRECT} integration, please edit protocol version and public key as
- *      per the instructions.
- */
 public class Constants {
 
-
+    /**
+     * WhenThen API endpoint as defined in the docs
+     * https://documentation.whenthen.com/api-reference#endpoints
+     */
     public static final String API_ENDPOINT = "https://api.dev.whenthen.co/api/graphql";
 
-    //https://documentation.whenthen.com/api-reference#client-token
-    public static final String CLIENT_TOKEN = "sk_test_FZjGdNNNhMQOqGeU7eqMHXcysl9YucgM";
+    /**
+     * Client token should be populated from a server-side request.
+     * https://documentation.whenthen.com/api-reference#client-token
+     */
+    public static String CLIENT_TOKEN = "sk_test_FZjGdNNNhMQOqGeU7eqMHXcysl9YucgM";
 
     public static final String WEBVIEW_SDK_URL = "https://mobile-hosted-checkout.whenthen.com/";
+
     /**
-     * The UUID of the flow you want the payment to run against.
+     * The Id of the flow you want the payment to run against. You can find it in
+     * https://app.whenthen.co/settings/developers
      */
     public static final String FLOW_ID = "6bbd2b09-0e8a-4682-874f-d1028425805e";
 
@@ -42,21 +32,11 @@ public class Constants {
 
     public static final String PAYMENT_METHOD_CARD = "CARD";
 
-
     public static final String CHECKOUT_LANGUAGE = "en";
 
 
     /**
-     * Changing this to ENVIRONMENT_PRODUCTION will make the API return chargeable card information.
-     * Please refer to the documentation to read about the required steps needed to enable
-     * ENVIRONMENT_PRODUCTION.
-     *
-     * @value #PAYMENTS_ENVIRONMENT
-     */
-    public static final int PAYMENTS_ENVIRONMENT = WalletConstants.ENVIRONMENT_TEST;
-
-    /**
-     * The allowed networks to be requested from the API. If the user has cards from networks not
+     * The allowed networks to be requested from the GooglePay API. If the user has cards from networks not
      * specified here in their account, these will not be offered for them to choose in the popup.
      *
      * @value #SUPPORTED_NETWORKS
@@ -79,14 +59,14 @@ public class Constants {
             "CRYPTOGRAM_3DS");
 
     /**
-     * Required by the API, but not visible to the user.
+     * Required by the GooglePay API, but not visible to the user.
      *
      * @value #COUNTRY_CODE Your local country
      */
     public static final String COUNTRY_CODE = "FI";
 
     /**
-     * Required by the API, but not visible to the user.
+     * Required by the GooglePay API, but not visible to the user.
      *
      * @value #CURRENCY_CODE Your local currency
      */
@@ -98,7 +78,7 @@ public class Constants {
      *
      * @value #SHIPPING_SUPPORTED_COUNTRIES
      */
-    public static final List<String> SHIPPING_SUPPORTED_COUNTRIES = Arrays.asList("US", "GB", "FI", "SE");
+    public static final List<String> SHIPPING_SUPPORTED_COUNTRIES = Arrays.asList("US", "GB", "FI", "SE", "IE");
 
     /**
      * The name of your payment processor/gateway. Please refer to their documentation for more
@@ -109,7 +89,8 @@ public class Constants {
     public static final String PAYMENT_GATEWAY_TOKENIZATION_NAME = "whenthen";
 
     /**
-     * Payment gateway merchantID must match the value used
+     * Payment gateway merchantID.
+     * For testing, use any string (must match what you've set when calling setupWallet API)
      * in https://documentation.whenthen.com/orchestrate/alternative-payment-methods/google-pay#configuring-whenThen-to-accept-googlepay
      */
     public static final String PAYMENT_GATEWAY_MERCHANT_ID = "test";
