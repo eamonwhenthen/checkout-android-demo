@@ -1,8 +1,8 @@
 ## Overview
 
-This reference application demonstrates basic usage of WhenThen API in android for:
+This reference application demonstrates basic usage of WhenThen API in android using:
 
- - WebView (Card Payment, [APMs](https://gocardless.com/guides/posts/rise-alternative-payment-methods/)) 
+ - WebView client (Card Payment, [APMs](https://gocardless.com/guides/posts/rise-alternative-payment-methods/)) 
  
  - Native (GooglePay,  Card Payment using
    tokenisation with [Vault API](https://documentation.whenthen.com/api-reference/vault#tokenise-payment-method) )
